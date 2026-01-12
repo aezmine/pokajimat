@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pok Aji Mat Virtual Tour</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-sidebar: #000000;
+            --bg-main: #111111;
+            --primary-yellow: #facc15;
+            --text-gray: #a1a1aa;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            background: var(--bg-main);
+            font-family: sans-serif;
+            height: 100vh;
+            color: white;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background: var(--bg-sidebar);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-gray);
+        }
+
+        /* Main */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #panorama-container {
+            width: 100%;
+            height: 75vh;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #222;
+        }
+
+        /* 🔥 Custom Hotspot Styles */
+.custom-hotspot {
+    background: rgba(250, 204, 21, 0.95);
+    color: #000;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.8);
+    animation: pulse 2s infinite;
+}
+
+.custom-hotspot.sleep {
+    background: #60a5fa;
+    box-shadow: 0 0 12px rgba(96,165,250,0.9);
+}
+
+.custom-hotspot.tired {
+    background: #f87171;
+    box-shadow: 0 0 12px rgba(248,113,113,0.9);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside>
+        <div style="color: var(--primary-yellow); margin-bottom: 40px; font-weight: bold;">
+            POK AJI MAT VIRTUAL TOUR
+        </div>
+
+        <nav>
+            <ul>
+                <li><i data-lucide="map"></i> Virtual Tour</li>
+                <li><i data-lucide="info"></i> Information</li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <header>
+            <div>
+                <h1 style="font-size: 20px;">Pok Aji Mat Virtual Tour</h1>
+                <span style="font-size: 12px; color: var(--text-gray);">
+                    Immersive Panorama Experience
+                </span>
+            </div>
+        </header>
+        <div id="coord-overlay" style="
+    position: absolute;
+    top: 100px;
+    right: 40px;
+    background: rgba(0,0,0,0.7);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 20;
+">
+    Pitch: <span id="pitch">0</span><br>
+    Yaw: <span id="yaw">0</span>
+</div>
+
+        <div id="panorama-container"></div>
+    </main>
+
+<script>
+lucide.createIcons();
+
+function createHotspot(hotSpotDiv, args) {
+    hotSpotDiv.classList.add("custom-hotspot", args.class);
+    hotSpotDiv.innerHTML = args.label;
+    hotSpotDiv.onclick = () => alert(args.message);
+}
+
+
+// Initialize Pannellum Viewer
+const viewer = pannellum.viewer('panorama-container', {
+    "default": {
+        "firstScene": "scene1",
+        "sceneFadeDuration": 1000,
+        "autoLoad": true,
+        "showControls": true
+    },
+    "scenes": {
+        "scene1": {
+            "type": "equirectangular",
+            "panorama": "img/pic10.jpg",
+            "hotSpots": [
+                {
+                    "pitch": -4.367105,
+                    "yaw": 38.386845,
+                    "type": "scene",
+                    "text": "Go to Scene 2",
+                    "sceneId": "scene2",
+                    "targetPitch": -6.156521,
+                    "targetYaw": 37.891724
+                }
+            ]
+        },
+        "scene2": {
+            "type": "equirectangular",
+            "panorama": "img/pic11.jpg",
+            "hotSpots": [
+                {
+                    "pitch": -15.662320,
+                    "yaw": -141.644798,
+                    "type": "scene",
+                    "text": "Back to Scene 1",
+                    "sceneId": "scene1",
+                    "targetPitch": -4.367105,
+                    "targetYaw": 38.386845
+                },
+
+                /* ℹ️ INFO HOTSPOT 1 */
+                {
+                    "pitch": -54.200303,
+                    "yaw": -52.048090,
+                    "type": "info",
+                    "text": "Afiq tengah tido, sedapnyeeeeee"
+                },
+
+                /* ℹ️ INFO HOTSPOT 2 */
+                {
+                    "pitch": -22.716685,
+                    "yaw": 50.228931,
+                    "type": "info",
+                    "text": "Penat ah main valo"
+                }
+            ]
+        }
+    }
+});
+
+
+
+
+// 🔹 LIVE COORDINATE TRACKING
+const pitchEl = document.getElementById("pitch");
+const yawEl = document.getElementById("yaw");
+
+viewer.on('mousemove', function () {
+    pitchEl.textContent = viewer.getPitch().toFixed(6);
+    yawEl.textContent = viewer.getYaw().toFixed(6);
+});
+
+viewer.on('mousedown', function () {
+    pitchEl.textContent = viewer.getPitch().toFixed(6);
+    yawEl.textContent = viewer.getYaw().toFixed(6);
+});
+</script>
+
+</body>
+</html>
